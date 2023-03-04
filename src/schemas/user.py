@@ -19,7 +19,7 @@ class UserUpdate(UserSchema):
     pass
 
 class UserAuth(BaseModel):
-    userName: str 
+    email: str 
     password: str
 
 

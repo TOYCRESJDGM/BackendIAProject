@@ -22,11 +22,11 @@ class UserCRUD(
     def __init__(self):
         super().__init__(models.User)
     
-    def get_by_name(self, db: Session ,user_name: Any):
-        return db.query(self.model_cls).filter(self.model_cls.userName == user_name).first()
+    def get_by_email(self, db: Session ,email: Any):
+        return db.query(self.model_cls).filter(self.model_cls.email == email).first()
     
     def auth_user(self, db: Session, auth: Any):
-        user = UserCRUD.get_by_name(self, db, auth.userName)
+        user = UserCRUD.get_by_email(self, db, auth.email)
         if user:
             decryptpassword = crypto.decrypt_password(user.password)
             if decryptpassword == auth.password:
