@@ -45,7 +45,13 @@ class UserCRUD(
                     "type": "sucess",
                     "message": "Bienvenido {}".format(user.userName),
                     "data":{
-                        "token": token
+                        "token": token,
+                        "user":{
+                            "name": user.userName,
+                            "id": user.id,
+                            "rol": user.rol,
+                            "email": user.email
+                        }
                     }
                 }
             else:
