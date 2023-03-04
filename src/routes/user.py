@@ -9,6 +9,15 @@ import src.controller as controller
 router = InferringRouter()
 
 
+def mapper_response(user):
+    print(user)
+    response = {
+        "userName": user.userName,
+        "email": user.email,
+        "creationDate": user.creationDate 
+    }
+    return response
+
 @cbv(router)
 class UserRouter:
     # dependency injection
@@ -20,14 +29,33 @@ class UserRouter:
         status endpoint
         :return:
         """
-        return "ImageRecordRouter ready"
+        return "User ready"
 
     @router.get("/")
     def get_users(self):
         """
-        Get all images
+        Get all users
         :return:
         """
-        #return controller.user.fetch_all(self.db)
-        return controller.user.fetch_all(self.db)
-        #return crud.image_record.fetch_all(self.db)
+        user_list = []
+        users = controller.user.fetch_all(self.db)
+        
+        for user in users:
+            user_list.append(mapper_response(user))
+
+        return {
+            "type": "sucess",
+            "data": user_list
+        }
+
+    @router.get("/{id}")
+    def get_user(self, id:int):
+        """
+        Get a single user
+        :return:
+        """
+
+        user =  controller.user.get(self.db, id)
+        response = mapper_response(user)
+        return response
+        

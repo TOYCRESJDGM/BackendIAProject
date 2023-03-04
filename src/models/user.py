@@ -20,8 +20,8 @@ class User(OrmBaseModel):
     ModificationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
 
 
-restart_seq = DDL("ALTER SEQUENCE %(table)s_id_seq RESTART WITH 100;")
+# restart_seq = DDL("ALTER SEQUENCE %(table)s_id_seq RESTART WITH 100;")
 
-event.listen(
-    User.__table__, "after_create", restart_seq.execute_if(dialect="mysql")
-)
+# event.listen(
+#     User.__table__, "after_create", restart_seq.execute_if(dialect="mysql")
+# )
