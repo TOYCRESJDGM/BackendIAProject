@@ -1,5 +1,4 @@
-from typing import List
-
+from typing import List, Any
 from sqlalchemy.orm import Session
 
 from src.controller.base_controller import BaseController
@@ -19,6 +18,10 @@ class UserCRUD(
 ):
     def __init__(self):
         super().__init__(models.User)
+    
+    def get_by_email(self, db: Session ,email: Any):
+        return db.get(self.model_cls, { email:email })
+
 
 
 # Create a singleton instance of the ImageRecordCRUD class

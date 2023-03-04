@@ -1,10 +1,15 @@
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from sqlalchemy.orm import Session
 
 from src.adapters.mysql_adapter import get_db
 import src.controller as controller
+import src.schemas as schemas
+from cryptography.fernet import Fernet
+
+key = Fernet.generate_key()
+f = Fernet(key)
 
 router = InferringRouter()
 
@@ -24,14 +29,6 @@ class UserRouter:
     # dependency injection
     db: Session = Depends(get_db)
 
-    @router.get("/home")
-    def home(self):
-        """
-        status endpoint
-        :return:
-        """
-        return "User ready"
-
     @router.get("/")
     def get_users(self):
         """
@@ -46,6 +43,7 @@ class UserRouter:
 
         return {
             "type": "sucess",
+            "message": "data found",
             "data": user_list
         }
 
@@ -55,23 +53,29 @@ class UserRouter:
         Get a single user
         :return:
         """
-        print("test")
-        print(id)
         user =  controller.user.get(self.db, id)
-        response = mapper_response(user)
-        print(response)
+        response = {
+            "type": "sucess",
+            "message": "data found",
+            "data": mapper_response(user)
+        } 
+        
         return response
     
     @router.post("/create")
-    def create_user(self):
+    def create_user(self, user:schemas.UserCreate):
         """
-        Get a single user
+        create a user
         :return:
         """
-        print("test")
-        print(id)
-        user =  controller.user.get(self.db, id)
-        response = mapper_response(user)
-        print(response)
-        return response
+        try:
+            user.password = f.encrypt(user.password.encode("utf-8"))
+            controller.user.create(self.db, entity=user)
+            return {
+                "type": "sucess",
+                "message": "user create successfull"
+            }
+        except Exception as e:
+            print(str(e))
+            raise HTTPException(status_code=400, detail=str(e))
         
