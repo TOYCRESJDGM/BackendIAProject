@@ -24,13 +24,13 @@ app.add_middleware(
 )
 
 
-@app.on_event("shutdown")
-def shutdown_event():
-    """
-    Drop the database
-    :return:
-    """
-    drop_db()
+# @app.on_event("shutdown")
+# def shutdown_event():
+#     """
+#     Drop the database
+#     :return:
+#     """
+#     drop_db()
 
 
 @app.on_event("startup")

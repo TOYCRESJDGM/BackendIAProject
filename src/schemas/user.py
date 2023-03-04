@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class UserSchema(BaseModel):
     userName: str
     email: str
+    rol: str
     password: str
     creationDate: Optional[datetime]
     ModificationDate: Optional[datetime]

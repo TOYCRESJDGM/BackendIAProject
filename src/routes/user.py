@@ -13,6 +13,7 @@ def mapper_response(user):
     print(user)
     response = {
         "userName": user.userName,
+        "rol": user.rol,
         "email": user.email,
         "creationDate": user.creationDate 
     }
@@ -54,8 +55,23 @@ class UserRouter:
         Get a single user
         :return:
         """
-
+        print("test")
+        print(id)
         user =  controller.user.get(self.db, id)
         response = mapper_response(user)
+        print(response)
+        return response
+    
+    @router.post("/create")
+    def create_user(self):
+        """
+        Get a single user
+        :return:
+        """
+        print("test")
+        print(id)
+        user =  controller.user.get(self.db, id)
+        response = mapper_response(user)
+        print(response)
         return response
         
