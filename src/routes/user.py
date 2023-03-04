@@ -6,10 +6,7 @@ from sqlalchemy.orm import Session
 from src.adapters.mysql_adapter import get_db
 import src.controller as controller
 import src.schemas as schemas
-from cryptography.fernet import Fernet
-
-key = Fernet.generate_key()
-f = Fernet(key)
+import src.utils.criptography as crypto
 
 router = InferringRouter()
 
@@ -30,22 +27,36 @@ class UserRouter:
     db: Session = Depends(get_db)
 
     @router.get("/")
-    def get_users(self):
+    def get_users(self, user_name: str = ''):
         """
         Get all users
         :return:
         """
-        user_list = []
-        users = controller.user.fetch_all(self.db)
+        response = {}
+        if user_name:
+            user = controller.user.get_by_name(self.db, user_name)
+            if user:
+                user_mapp = (mapper_response(user))
+            else:
+                response = {
+                    "type": "error",
+                    "message": "data not found",
+                    "data": []
+                }
+        else:
+            user_mapp = []
+            users = controller.user.fetch_all(self.db)
         
-        for user in users:
-            user_list.append(mapper_response(user))
+            for user in users:
+                user_mapp.append(mapper_response(user))
 
-        return {
-            "type": "sucess",
-            "message": "data found",
-            "data": user_list
+        response = {
+                "type": "success",
+                "message": "data found",
+                "data": user_mapp
         }
+
+        return response
 
     @router.get("/{id}")
     def get_user(self, id:int):
@@ -69,7 +80,7 @@ class UserRouter:
         :return:
         """
         try:
-            user.password = f.encrypt(user.password.encode("utf-8"))
+            user.password = crypto.encrypt_password(user.password)
             controller.user.create(self.db, entity=user)
             return {
                 "type": "sucess",
@@ -78,4 +89,12 @@ class UserRouter:
         except Exception as e:
             print(str(e))
             raise HTTPException(status_code=400, detail=str(e))
+    
+    @router.post("/auth")
+    def auth_user(self, auth: schemas.UserAuth):
+        """
+        create a user
+        :return:
+        """
+        return controller.user.auth_user(self.db, auth)
         

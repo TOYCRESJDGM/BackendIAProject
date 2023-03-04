@@ -18,6 +18,10 @@ class UserCreate(UserSchema):
 class UserUpdate(UserSchema):
     pass
 
+class UserAuth(BaseModel):
+    userName: str 
+    password: str
+
 
 class User(UserSchema):
     user_id: int = None
