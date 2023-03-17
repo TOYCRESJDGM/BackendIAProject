@@ -11,16 +11,18 @@ ORM class to interact with the user shares table in the database
 """
 
 
-class UserShare(OrmBaseModel):
+class ListLink(OrmBaseModel):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    shareId = Column(Integer, ForeignKey('category.id'), nullable=False)
-    UserIdShare = Column(Integer, ForeignKey('user.id'), nullable=False)
+    name = Column(String(100), nullable=True, unique=True)
+    description = Column(String(1000), nullable=True)
+    idCategory = Column(Integer, ForeignKey('category.id'), nullable=False)
+    idCreationUser = Column(Integer, ForeignKey('user.id'), nullable=False)
     creationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
     ModificationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
 
 
-restart_seq = DDL("ALTER SEQUENCE %(table)s_label_id_seq RESTART WITH 100;")
+restart_seq = DDL("ALTER SEQUENCE %(table)s_id_seq RESTART WITH 100;")
 
 event.listen(
-    UserShare.__table__, "after_create", restart_seq.execute_if(dialect="mysql")
+    ListLink.__table__, "after_create", restart_seq.execute_if(dialect="mysql")
 )

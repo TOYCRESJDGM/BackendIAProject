@@ -1,7 +1,7 @@
 from src.adapters.mysql_adapter import create_db, drop_db
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from src.routes import user, category
+from src.routes import user, category, list_link
 import uvicorn
 from src.utils.settings import (
     APP_PORT
@@ -53,6 +53,13 @@ app.include_router(
     category.router,
     prefix="/category",
     tags=["categories"],
+    responses={404: {"description": "Not found"}},
+)
+
+app.include_router(
+    list_link.router,
+    prefix="/listlink",
+    tags=["listlink"],
     responses={404: {"description": "Not found"}},
 )
 

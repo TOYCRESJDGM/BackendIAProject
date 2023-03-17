@@ -6,6 +6,8 @@ from pydantic import BaseModel
 class ListLinkSchema(BaseModel):
     name: str
     idCreationUser: int
+    idCategory: int
+    links: Optional[list]
     description: Optional[str]
     creationDate: Optional[datetime]
     ModificationDate: Optional[datetime]
