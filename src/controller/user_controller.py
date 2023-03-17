@@ -10,10 +10,9 @@ import src.utils.criptography as crypto
 from src.utils.settings import ( SECRET_KEY) 
 
 """
-This class is a CRUD class for the predictions table.
+This class is a CRUD class for the user table.
 """
 
-print(schemas.user)
 class UserCRUD(
     
     BaseController[schemas.User, schemas.UserCreate, schemas.UserUpdate],
@@ -72,5 +71,5 @@ class UserCRUD(
 
 
 
-# Create a singleton instance of the ImageRecordCRUD class
+# Create a singleton instance of the UserCRUD class
 user = UserCRUD()

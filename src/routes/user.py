@@ -12,7 +12,6 @@ router = InferringRouter()
 
 
 def mapper_response(user):
-    print(user)
     response = {
         "userName": user.userName,
         "rol": user.rol,
