@@ -26,7 +26,7 @@ CREATE TABLE if not exists listLink (
     name varchar(255) NOT null COMMENT 'Nombre de la lista',
     description varchar(255) COMMENT 'descripcion de la lista',
     idCreationUser int(11) NOT NULL  COMMENT 'id del usuario que creo la lista',
-    idCategory int(11) COMMENT 'id de la categoria de la lista',
+    idCategory int(11) NOT NULL  COMMENT 'id de la categoria de la lista',
     creationDate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de creacion',
     ModificationDate timestamp COMMENT 'Fecha de modificacion',
     PRIMARY KEY (id),
@@ -60,4 +60,21 @@ CREATE TABLE if not exists listLinksPage (
     REFERENCES listLink(id),
     CONSTRAINT FK_Page FOREIGN KEY (idPage)
     REFERENCES Page(id),
-) auto_increment=1 default CHARSET=utf8mb4 comment 'listLink';
+) auto_increment=1 default CHARSET=utf8mb4 comment 'List Links Page Relation';
+
+---- ShareList create table ----
+CREATE TABLE if not exists ShareList (
+    id int(11) NOT NULL auto_increment COMMENT 'identificador',
+    idList int(11) NOT NULL  COMMENT 'id de la pagina Procesada',
+    idCreationUser int(11) NOT NULL  COMMENT 'id del usuario al que pertenece',
+    idShareUser int(11) NOT NULL  COMMENT 'id del usuario compartido',
+    creationDate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de creacion',
+    ModificationDate timestamp COMMENT 'Fecha de modificacion',
+    PRIMARY KEY (id),
+    CONSTRAINT FK_ListLinks FOREIGN KEY (idList)
+    REFERENCES listLink(id),
+    CONSTRAINT FK_CreationUser FOREIGN KEY (idCreationUser)
+    REFERENCES User(id),
+    CONSTRAINT FK_ShareUser FOREIGN KEY (idShareUser)
+    REFERENCES User(id)
+) auto_increment=1 default CHARSET=utf8mb4 comment 'Share list table';
