@@ -12,7 +12,6 @@ router = InferringRouter()
 
 
 def mapper_response(category):
-    print(category)
     response = {
         "id": category.id,
         "title": category.title,
@@ -37,14 +36,21 @@ class CategoryRouter:
         category_map = []
         categories = controller.category.fetch_all(self.db)
         
-        for category in categories:
-            category_map.append(mapper_response(category))
+        if categories:
+            for category in categories:
+                category_map.append(mapper_response(category))
 
-        response = {
-                "type": "success",
-                "message": "data found",
-                "data": category_map
-        }
+            response = {
+                    "type": "success",
+                    "message": "data found",
+                    "data": category_map
+            }
+        else:
+            response = {
+                    "type": "error",
+                    "message": "data not found",
+                    "data": []
+            }
 
         return response
 
@@ -55,12 +61,20 @@ class CategoryRouter:
         :return:
         """
         category =  controller.category.get(self.db, id)
-        response = {
-            "type": "sucess",
-            "message": "data found",
-            "data": mapper_response(category)
-        } 
-        
+        if category:
+
+            response = {
+                "type": "sucess",
+                "message": "data found",
+                "data": mapper_response(category)
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found",
+                "data": []
+            }
+
         return response
     
     @router.post("/create")
@@ -78,3 +92,36 @@ class CategoryRouter:
         except Exception as e:
             print(str(e))
             raise HTTPException(status_code=400, detail=str(e))
+        
+    @router.delete("/{id}")
+    def delete_category(self, id: int):
+        """
+        delete a category
+        :return:
+        """
+        try:
+            category = controller.category.get(self.db, id)
+            if category:
+                list_lisk_asociate = controller.list.get_by_category(self.db, category.id)
+                for list_link in list_lisk_asociate:
+                    print("delete")
+                    category_update = {
+                        "idCategory": None
+                    }
+                    controller.list.update(self.db,model_id=list_link.id, entity=category_update)
+                controller.category.delete(self.db, id)
+                response = {
+                    "type": "sucess",
+                    "message": "Category delete successfull"
+                }
+            else:
+                response = {
+                "type": "error",
+                "message": "data not found",
+                "data": []
+            }
+        except Exception as e:
+            print(str(e))
+            raise HTTPException(status_code=400, detail=str(e))
+        
+        return response

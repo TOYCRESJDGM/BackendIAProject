@@ -98,7 +98,7 @@ class UserRouter:
         return controller.user.auth_user(self.db, auth)
     
     @router.delete("/{id}")
-    def auth_user(self, id: int):
+    def delete_user(self, id: int):
         """
         delete a user
         :return:

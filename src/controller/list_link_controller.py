@@ -18,7 +18,10 @@ class ListLinkCRUD(
         super().__init__(models.ListLink)
 
     def get_by_creation_user_id(self, db: Session ,user_id: Any):
-        return db.query(self.model_cls).filter(self.model_cls.idCreationUser == user_id).all()       
+        return db.query(self.model_cls).filter(self.model_cls.idCreationUser == user_id).all()   
+
+    def get_by_category(self, db: Session ,category_id: Any):
+        return db.query(self.model_cls).filter(self.model_cls.idCategory == category_id).all()    
 
 # Create a singleton instance of the ListLinkCRUD class
 list = ListLinkCRUD()

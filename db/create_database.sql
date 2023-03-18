@@ -26,7 +26,7 @@ CREATE TABLE if not exists listLink (
     name varchar(255) NOT null COMMENT 'Nombre de la lista',
     description varchar(255) COMMENT 'descripcion de la lista',
     idCreationUser int(11) NOT NULL  COMMENT 'id del usuario que creo la lista',
-    idCategory int(11) NOT NULL  COMMENT 'id de la categoria de la lista',
+    idCategory int(11) COMMENT 'id de la categoria de la lista',
     creationDate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de creacion',
     ModificationDate timestamp COMMENT 'Fecha de modificacion',
     PRIMARY KEY (id),
