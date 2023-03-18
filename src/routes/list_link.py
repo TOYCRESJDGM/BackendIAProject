@@ -21,6 +21,26 @@ def creation_list_mapper(list):
         "creationDate": None
     }
 
+def mapper_pages(page):
+    return {
+        "title": page.title,
+        "description": page.description,
+        "link": page.link,
+        "linkImage": page.linkImage,
+        "creationDate": page.creationDate
+    }
+    return response
+
+def response_list(list_link, pages):
+    return {
+        "name": list_link.name,
+        "description": list_link.description,
+        "idCategory": list_link.idCategory,
+        "idCreationUser": list_link.idCreationUser,
+        "pages": list(map(mapper_pages, pages)),
+        "creationDate": list_link.creationDate
+    }
+    
 @cbv(router)
 class ListLinkRouter:
     # dependency injection
@@ -32,35 +52,55 @@ class ListLinkRouter:
         Get all list links
         :return:
         """
-        response = {}
-        
-        list_maps = []
-        categories = controller.list.fetch_all(self.db)
-        
-        for category in categories:
-            list_maps.append(mapper_response(category))
-
-        response = {
-                "type": "success",
-                "message": "data found",
-                "data": list_maps
-        }
-
+        pages = []
+        response_data = []
+        list_links =  controller.list.fetch_all(self.db)
+        if list_links:
+            for link_page in list_links:
+                link_list_page = controller.link.get_by_list_id(self.db, link_page.id)
+                for link in link_list_page:
+                    page = controller.page.get(self.db, link.idPage)
+                    pages.append(page)
+                
+                response_data.append(response_list(link_page, pages))
+                pages.clear()
+            
+            response = {
+                    "type": "sucess",
+                    "message": "data found",
+                    "data": response_data
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found"
+            }
         return response
 
     @router.get("/{id}")
-    def get_category(self, id:int):
+    def get_list_link_id(self, id:int):
         """
-        Get a single category
+        Get a single list link
         :return:
         """
-        list =  controller.list.get(self.db, id)
-        response = {
-            "type": "sucess",
-            "message": "data found",
-            "data": mapper_response(list)
-        } 
-        
+        pages = []
+        list_link =  controller.list.get(self.db, id)
+        if list_link:
+            link_list_page = controller.link.get_by_list_id(self.db, list_link.id)
+            for link in link_list_page:
+                page = controller.page.get(self.db, link.idPage)
+                pages.append(page)
+            
+            response = {
+                "type": "sucess",
+                "message": "data found",
+                "data": response_list(list_link, pages)
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found"
+            }
         return response
     
     @router.post("/create")
@@ -73,10 +113,11 @@ class ListLinkRouter:
             creation_list =creation_list_mapper(list)
             print(creation_list)
 
-            controller.list.create(self.db, entity=creation_list)
+            list_created = controller.list.create(self.db, entity=creation_list)
             if list.links:
                 for link in list.links:
                     #model to process link
+                    #creation pages and relation
                     print("Procesing link ...")
                     page = {
                         "link": link
@@ -84,10 +125,14 @@ class ListLinkRouter:
                     print("creando la pagina")
                     page_created = controller.page.create(self.db, entity=page)
 
-            if page_created:
-                print("relacioando lista")
-
-
+                    if page_created:
+                        print("relacioando lista")
+                        list_link = {
+                            "idList": list_created.id,
+                            "idPage": page_created.id
+                        }
+                        link_created = controller.link.create(self.db, entity=list_link)
+          
             return {
                 "type": "sucess",
                 "message": "List create successfull"

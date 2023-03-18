@@ -68,8 +68,5 @@ class UserCRUD(
 
         return response
 
-
-
-
 # Create a singleton instance of the UserCRUD class
 user = UserCRUD()
