@@ -11,16 +11,13 @@ import src.utils.criptography as crypto
 
 router = InferringRouter()
 
-
-
-
 @cbv(router)
 class PageRouter:
     # dependency injection
     db: Session = Depends(get_db)
 
     @router.get("/")
-    def get_users_page(self, creation_date: DateTime):
+    def get_users_page(self, start_date: datetime,end_date: datetime):
         """
         Get all users
         :return:
@@ -66,27 +63,3 @@ class PageRouter:
         
         return response
     
-    @router.post("/create")
-    def create_user(self, user:schemas.UserCreate):
-        """
-        create a user
-        :return:
-        """
-        try:
-            user.password = crypto.encrypt_password(user.password)
-            controller.user.create(self.db, entity=user)
-            return {
-                "type": "sucess",
-                "message": "user create successfull"
-            }
-        except Exception as e:
-            print(str(e))
-            raise HTTPException(status_code=400, detail=str(e))
-    
-    @router.post("/auth")
-    def auth_user(self, auth: schemas.UserAuth):
-        """
-        create a user
-        :return:
-        """
-        return controller.user.auth_user(self.db, auth)
