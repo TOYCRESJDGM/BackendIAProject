@@ -96,4 +96,24 @@ class UserRouter:
         :return:
         """
         return controller.user.auth_user(self.db, auth)
+    
+    @router.delete("/{id}")
+    def auth_user(self, id: int):
+        """
+        delete a user
+        :return:
+        """
+        print("delete")
+        try:
+            object_delete = controller.user.delete(self.db, id)
+            print("RIGHT")
+        except Exception as e:
+            print(str(e))
+            raise HTTPException(status_code=400, detail=str(e))
+        
+        return {
+            "type": "sucess",
+            "message": "User disabled successfull"
+        }
+    
         

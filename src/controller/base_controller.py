@@ -91,3 +91,17 @@ class BaseController(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
+    
+    def delete(self, db: Session, model_id: Any) -> Optional[ModelType]:
+        """
+        delete a record.
+        :param db:
+        :param model_id:
+        :return:
+        """
+        db_obj = self.get(db, model_id)
+        if db_obj is None:
+            raise Exception("Object not found")
+        db.delete(db_obj)
+        db.commit()
+        return
