@@ -23,16 +23,17 @@ def creation_list_mapper(list):
 
 def mapper_pages(page):
     return {
+        "id": page.id,
         "title": page.title,
         "description": page.description,
         "link": page.link,
         "linkImage": page.linkImage,
         "creationDate": page.creationDate
     }
-    return response
 
 def response_list(list_link, pages):
     return {
+        "id": list_link.id,
         "name": list_link.name,
         "description": list_link.description,
         "idCategory": list_link.idCategory,
@@ -47,14 +48,17 @@ class ListLinkRouter:
     db: Session = Depends(get_db)
 
     @router.get("/")
-    def get_lists(self):
+    def get_lists(self, user_id: int = None):
         """
         Get all list links
         :return:
         """
         pages = []
         response_data = []
-        list_links =  controller.list.fetch_all(self.db)
+        if user_id:
+            list_links =  controller.list.get_by_creation_user_id(self.db, user_id)
+        else:
+            list_links =  controller.list.fetch_all(self.db)
         if list_links:
             for link_page in list_links:
                 link_list_page = controller.link.get_by_list_id(self.db, link_page.id)
