@@ -49,7 +49,7 @@ CREATE TABLE if not exists Page (
 ) auto_increment=1 default CHARSET=utf8mb4 comment 'pages';
 
 ---- ListLinkPage create table ----
-CREATE TABLE if not exists listLinksPage (
+CREATE TABLE if not exists listLinkPage (
     id int(11) NOT NULL auto_increment COMMENT 'identificador',
     idPage int(11) NOT NULL  COMMENT 'id de la pagina Procesada',
     idListLink int(11) NOT NULL  COMMENT 'id de la lista a la que pertenece',
