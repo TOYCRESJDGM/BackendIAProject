@@ -13,6 +13,7 @@ router = InferringRouter()
 
 def mapper_response(user):
     response = {
+        "id": user.id,
         "userName": user.userName,
         "rol": user.rol,
         "email": user.email,
@@ -105,8 +106,11 @@ class UserRouter:
         """
         print("delete")
         try:
-            object_delete = controller.user.delete(self.db, id)
-            print("RIGHT")
+            user = controller.user.get(self.db, id)
+            if user:
+                #delete share and all the lists
+                object_delete = controller.user.delete(self.db, id)
+            
         except Exception as e:
             print(str(e))
             raise HTTPException(status_code=400, detail=str(e))
