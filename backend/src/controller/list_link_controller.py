@@ -17,8 +17,12 @@ class ListLinkCRUD(
     def __init__(self):
         super().__init__(models.ListLink)
 
-    def get_by_creation_user_id(self, db: Session ,user_id: Any):
-        return db.query(self.model_cls).filter(self.model_cls.idCreationUser == user_id).all()   
+    def get_by_creation_user_id(self, db: Session ,user_id: Any, start_date: Any = None, end_date: Any = None):
+        
+        if start_date and end_date:
+            return db.query(self.model_cls).filter(self.model_cls.idCreationUser == user_id, self.model_cls.creationDate >= start_date, self.model_cls.creationDate <= end_date).all()   
+        else:
+            return db.query(self.model_cls).filter(self.model_cls.idCreationUser == user_id).all()   
 
     def get_by_category(self, db: Session ,category_id: Any):
         return db.query(self.model_cls).filter(self.model_cls.idCategory == category_id).all()    

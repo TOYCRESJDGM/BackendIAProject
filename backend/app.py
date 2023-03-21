@@ -1,7 +1,7 @@
 from src.adapters.mysql_adapter import create_db, drop_db
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from src.routes import user, category, list_link
+from src.routes import user, category, list_link, page
 import uvicorn
 from src.utils.settings import (
     APP_PORT
@@ -63,6 +63,12 @@ app.include_router(
     responses={404: {"description": "Not found"}},
 )
 
+app.include_router(
+    page.router,
+    prefix="/page",
+    tags=["pages"],
+    responses={404: {"description": "Not found"}},
+)
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=5000)
 
