@@ -11,55 +11,75 @@ import src.utils.criptography as crypto
 
 router = InferringRouter()
 
+def mapper_pages(page):
+    return {
+        "id": page.id,
+        "title": page.title,
+        "description": page.description,
+        "link": page.link,
+        "linkImage": page.linkImage,
+        "creationDate": page.creationDate
+    }
+
 @cbv(router)
 class PageRouter:
     # dependency injection
     db: Session = Depends(get_db)
 
     @router.get("/")
-    def get_users_page(self, start_date: datetime,end_date: datetime):
+    def get_all_page_user(self, start_date: datetime = None,end_date: datetime = None, user_id: int = None):
         """
-        Get all users
+        Get all page user
         :return:
         """
-        response = {}
-        if user_name:
-            user = controller.user.get_by_name(self.db, user_name)
-            if user:
-                user_mapp = (mapper_response(user))
-            else:
-                response = {
-                    "type": "error",
-                    "message": "data not found",
-                    "data": []
-                }
-        else:
-            user_mapp = []
-            users = controller.user.fetch_all(self.db)
-        
-            for user in users:
-                user_mapp.append(mapper_response(user))
-
-        response = {
-                "type": "success",
+        if (start_date and not end_date) or (not start_date and end_date):
+            if not start_date:
+                start_date =  datetime.now()
+            if not end_date:
+                end_date =  datetime.now()
+    
+        pages = []
+        if user_id:
+            list_links =  controller.list.get_by_creation_user_id(self.db, user_id, start_date, end_date)
+            for link_page in list_links:
+                link_list_page = controller.link.get_by_list_id(self.db, link_page.id)
+                for link in link_list_page:
+                    page = controller.page.get(self.db, link.idPage)
+                    pages.append(page)
+            
+        if len(pages)>0:
+            response = {
+                "type": "sucess",
                 "message": "data found",
-                "data": user_mapp
-        }
-
-        return response
+                "data": list(map(mapper_pages, pages))
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found"
+                }
+            
+        return response  
 
     @router.get("/{id}")
-    def get_user(self, id:int):
+    def get_page_id(self, id:int):
         """
         Get a single user
         :return:
         """
-        user =  controller.user.get(self.db, id)
-        response = {
-            "type": "sucess",
-            "message": "data found",
-            "data": mapper_response(user)
-        } 
+        page =  controller.page.get(self.db, id)
+        if page:
+            response = {
+                "type": "sucess",
+                "message": "data found",
+                "data": mapper_pages(page)
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found",
+                "data": []
+            }
         
         return response
     
