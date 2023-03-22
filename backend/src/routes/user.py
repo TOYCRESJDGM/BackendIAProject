@@ -27,14 +27,14 @@ class UserRouter:
     db: Session = Depends(get_db)
 
     @router.get("/")
-    def get_users(self, user_name: str = ''):
+    def get_users(self, user_email: str = ''):
         """
         Get all users
         :return:
         """
         response = {}
-        if user_name:
-            user = controller.user.get_by_name(self.db, user_name)
+        if user_email:
+            user = controller.user.get_by_email(self.db, user_email)
             if user:
                 user_mapp = (mapper_response(user))
             else:
@@ -119,5 +119,54 @@ class UserRouter:
             "type": "sucess",
             "message": "User disabled successfull"
         }
+    
+
+    @router.post("/share")
+    def share_with_user(self, share: schemas.UserShareListSchema):
+        """
+        share list with user
+        :return:
+        """
+        try:
+            creation_user =  controller.user.get(self.db, share.idCreationUser)
+            if creation_user:
+                share_user = controller.user.get_by_email(self.db, share.emailShare)
+                if share_user:
+                    if creation_user.email == share_user.email:
+                        response = {
+                            "type": "error",
+                            "message": "It's not possible to share the list with yourself"
+                        }
+               
+                    create_share = {
+                        "idList": share.idList,
+                        "idCreationUser": creation_user.id,
+                        "idShareUser" : share_user.id
+                    }
+
+                    controller.share.create(self.db, entity=create_share)
+
+                    response = {
+                        "type": "sucess",
+                        "message": "successfully shared list"
+                    }
+                else:
+                    response = {
+                        "type": "error",
+                        "message": "The email user does not exist"
+                    }
+
+            else:
+                response = {
+                    "type": "error",
+                    "message": "Creation user does not exist"
+                }
+
+
+            return response 
+    
+        except Exception as e:
+            print(str(e))
+            raise HTTPException(status_code=400, detail=str(e))
     
         
