@@ -62,8 +62,8 @@ CREATE TABLE if not exists listLinkPage (
     REFERENCES Page(id),
 ) auto_increment=1 default CHARSET=utf8mb4 comment 'List Links Page Relation';
 
----- ShareList create table ----
-CREATE TABLE if not exists ShareList (
+---- Share create table ----
+CREATE TABLE if not exists Share(
     id int(11) NOT NULL auto_increment COMMENT 'identificador',
     idList int(11) NOT NULL  COMMENT 'id de la pagina Procesada',
     idCreationUser int(11) NOT NULL  COMMENT 'id del usuario al que pertenece',
