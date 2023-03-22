@@ -83,4 +83,32 @@ class PageRouter:
             }
         
         return response
-    
+
+    @router.get("/list/{list_id}")
+    def get_page_with_list_id(self, list_id:int):
+        """
+        Get a pages with list id
+        :return:
+        """
+        pages = []
+        if list_id:
+            list_link =  controller.list.get(self.db, list_id)
+            if list_link:
+                link_list_page = controller.link.get_by_list_id(self.db, list_link.id)
+                for link in link_list_page:
+                    page = controller.page.get(self.db, link.idPage)
+                    pages.append(page)
+            
+        if len(pages)>0:
+            response = {
+                "type": "sucess",
+                "message": "data found",
+                "data": list(map(mapper_pages, pages))
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found"
+                }
+            
+        return response  
