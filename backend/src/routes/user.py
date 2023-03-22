@@ -104,21 +104,53 @@ class UserRouter:
         delete a user
         :return:
         """
-        print("delete")
         try:
             user = controller.user.get(self.db, id)
             if user:
-                #delete share and all the lists
-                object_delete = controller.user.delete(self.db, id)
+                #busca las listas compartidas al usuario.
+                print("searching for shared lists...") 
+                shared_lists = controller.share.get_by_share_user(self.db, user.id)
+                if shared_lists:
+                    for shared_list in shared_lists:
+                        controller.share.delete(self.db, shared_list.id)
+
+                #busca las listas compartidas creadas por ese usuario. 
+                print("searching for created shared lists...")
+                shared_by_user =  controller.share.get_by_creation_user(self.db, user.id)
+                if shared_by_user:
+                    for shared_creation in shared_by_user:
+                        controller.share.delete(self.db, shared_creation.id)
+                #Busca las listas, listas relacionadas y paginas.
+                print("searching pages and lists...")
+                lists_creation = controller.list.get_by_creation_user_id(self.db, user.id)
+                if lists_creation:
+                    for list_creation in lists_creation:
+                        link_list_page_creation = controller.link.get_by_list_id(self.db, list_creation.id)
+                        if link_list_page_creation:
+                            for link in link_list_page_creation:
+                                controller.link.delete(self.db, link.id)
+                                controller.page.delete(self.db, link.idPage)
+                                
+                        controller.list.delete(self.db,list_creation.id)
+                            
+                controller.user.delete(self.db, id)
+                response = {
+                    "type": "sucess",
+                    "message": "user disabled successfull"
+                }
+            else:
+                response = {
+                    "type": "errpr",
+                    "message": "user not found"
+                }
+            
+            return response
+
             
         except Exception as e:
             print(str(e))
             raise HTTPException(status_code=400, detail=str(e))
         
-        return {
-            "type": "sucess",
-            "message": "User disabled successfull"
-        }
     
 
     @router.post("/share")
