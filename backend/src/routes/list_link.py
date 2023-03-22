@@ -145,3 +145,42 @@ class ListLinkRouter:
         except Exception as e:
             print(str(e))
             raise HTTPException(status_code=400, detail=str(e))
+        
+    @router.get("/shared/user")
+    def get_shared_list(self, user_id: int = None):
+        """
+        Get all list links shared with me
+        :return:
+        """
+        print("test")
+        pages = []
+        response_data = []
+        if user_id:
+            list_links_shared =  controller.share.get_by_share_user(self.db, user_id)
+        if list_links_shared:
+            for shared_list in list_links_shared:
+                list_link_found = controller.list.get(self.db, shared_list.idList)
+                print(list_link_found)
+                if list_link_found:
+                    link_list_page_shared = controller.link.get_by_list_id(self.db, list_link_found.id)
+                    for link in link_list_page_shared:
+                        page = controller.page.get(self.db, link.idPage)
+                        pages.append(page)
+                    
+                    response_data.append(response_list(list_link_found, pages))
+                    pages.clear()
+                
+                else:
+                    pass
+            
+            response = {
+                    "type": "sucess",
+                    "message": "data found",
+                    "data": response_data
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found"
+            }
+        return response

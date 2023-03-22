@@ -17,6 +17,7 @@ def mapper_pages(page):
         "title": page.title,
         "description": page.description,
         "link": page.link,
+        "img": "base64",
         "linkImage": page.linkImage,
         "creationDate": page.creationDate
     }

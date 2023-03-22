@@ -23,6 +23,28 @@ class UserAuth(BaseModel):
     password: str
 
 
+class UserShareListSchema(BaseModel):
+    idList: int
+    idCreationUser: int
+    emailShare: str
+    idShareUser: Optional[int]
+    creationDate: Optional[datetime]
+    ModificationDate: Optional[datetime]
+
+
+class UserShareListCreate(UserShareListSchema):
+    pass
+
+
+class UserShareListUpdate(UserShareListSchema):
+    pass
+
+class UserShareList(UserShareListSchema):
+    user_id: int = None
+
+    class Config:
+        orm_mode = True
+
 class User(UserSchema):
     user_id: int = None
 
