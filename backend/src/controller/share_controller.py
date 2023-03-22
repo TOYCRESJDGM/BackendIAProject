@@ -19,7 +19,10 @@ class ShareCRUD(
 
 
     def get_by_share_user(self, db: Session , share_user_id: Any):
-        return db.query(self.model_cls).filter(self.model_cls.idShareUser == share_user_id).all()    
+        return db.query(self.model_cls).filter(self.model_cls.idShareUser == share_user_id).all()
+
+    def get_by_creation_user(self, db: Session , creation_user_id: Any):
+        return db.query(self.model_cls).filter(self.model_cls.idCreationUser == creation_user_id).all()
 
 # Create a singleton instance of the ShareCRUD class
 share = ShareCRUD()
