@@ -8,6 +8,9 @@ from src.adapters.mysql_adapter import get_db
 import src.controller as controller
 import src.schemas as schemas
 
+from src.utils import public_image
+
+
 router = InferringRouter()
 
 
@@ -123,6 +126,9 @@ class ListLinkRouter:
                     #model to process link
                     #creation pages and relation
                     print("Procesing link ...")
+                    
+                    image = "src/images/dog.jpg"
+                    public_image(image)
                     page = {
                         "link": link
                     }

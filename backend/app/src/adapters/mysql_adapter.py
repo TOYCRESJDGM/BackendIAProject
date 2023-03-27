@@ -10,13 +10,15 @@ from sqlalchemy.orm import (
 from src.utils.settings import (
     ENVIRONMENT, 
     DB_NAME,
-    DB_HOST
+    DB_HOST,
+    DB_USER_NAME,
+    DB_PASSWORD
 )
 
 from functools import wraps
 from .orm_base import OrmBaseModel
 
-SQLALCHEMY_DATABASE_URL = "mysql://root:admin@localhost:3306/project"
+SQLALCHEMY_DATABASE_URL = "mysql://"+DB_USER_NAME+":"+DB_PASSWORD+"@"+DB_HOST+":"+str(3306)+"/"+ DB_NAME
 print(f"SQLALCHEMY_DATABASE_URL: {SQLALCHEMY_DATABASE_URL}")
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

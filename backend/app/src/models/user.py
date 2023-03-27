@@ -14,9 +14,9 @@ ORM class to interact with the user table in the database
 class User(OrmBaseModel):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     userName = Column(String(100), nullable=False, unique=True)
-    email = Column(String(1000), nullable=False, unique=True)
+    email = Column(String(255), nullable=False, unique=True)
     rol = Column(String(50), nullable=False)
-    password = Column(String(1000), nullable=False)
+    password = Column(String(255), nullable=False)
     creationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
     ModificationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
 

@@ -14,7 +14,7 @@ ORM class to interact with the user shares table in the database
 class ListLink(OrmBaseModel):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(100), nullable=True, unique=True)
-    description = Column(String(1000), nullable=True)
+    description = Column(String(255), nullable=True)
     idCategory = Column(Integer, ForeignKey('category.id'), nullable=True)
     idCreationUser = Column(Integer, ForeignKey('user.id'), nullable=False)
     creationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
