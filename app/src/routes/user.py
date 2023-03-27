@@ -103,7 +103,17 @@ class UserRouter:
         create a user
         :return:
         """
-        return controller.user.auth_user(self.db, auth)
+        user = controller.user.get_by_email(self.db, auth.email)
+        if user:
+            response = controller.user.auth_user(self.db, auth)
+        else:
+            response = {
+                "type": "error",
+                "message": "credentials error",
+                "data": []
+            }
+            
+        return response
     
     @router.delete("/{id}")
     def delete_user(self, id: int):
@@ -148,7 +158,8 @@ class UserRouter:
             else:
                 response = {
                     "type": "errpr",
-                    "message": "user not found"
+                    "message": "user not found",
+                    "data": []
                 }
             
             return response

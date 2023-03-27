@@ -57,8 +57,10 @@ class PageRouter:
         else:
             response = {
                 "type": "error",
-                "message": "data not found"
-                }
+                "message": "data not found",
+                "data": []
+
+            }
             
         return response  
 
@@ -108,7 +110,8 @@ class PageRouter:
         else:
             response = {
                 "type": "error",
-                "message": "data not found"
-                }
+                "message": "data not found",
+                "data": []
+            }
             
         return response  

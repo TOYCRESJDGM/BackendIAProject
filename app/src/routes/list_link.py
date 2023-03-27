@@ -8,7 +8,7 @@ from src.adapters.mysql_adapter import get_db
 import src.controller as controller
 import src.schemas as schemas
 
-from src.utils import public_image
+from src.utils import scraping_url
 
 
 router = InferringRouter()
@@ -80,7 +80,8 @@ class ListLinkRouter:
         else:
             response = {
                 "type": "error",
-                "message": "data not found"
+                "message": "data not found",
+                "data": []
             }
         return response
 
@@ -106,7 +107,8 @@ class ListLinkRouter:
         else:
             response = {
                 "type": "error",
-                "message": "data not found"
+                "message": "data not found",
+                "data": []
             }
         return response
     
@@ -126,11 +128,11 @@ class ListLinkRouter:
                     #model to process link
                     #creation pages and relation
                     print("Procesing link ...")
-                    
-                    image = "src/images/dog.jpg"
-                    public_image(image)
+                    processing_link =  scraping_url(link)
                     page = {
-                        "link": link
+                        "link": link,
+                        "title": processing_link['title'],
+                        "description": processing_link['description']
                     }
                     print("creando la pagina")
                     page_created = controller.page.create(self.db, entity=page)
@@ -187,6 +189,7 @@ class ListLinkRouter:
         else:
             response = {
                 "type": "error",
-                "message": "data not found"
+                "message": "data not found",
+                "data": []
             }
         return response
