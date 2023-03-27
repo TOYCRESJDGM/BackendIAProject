@@ -65,11 +65,18 @@ class UserRouter:
         :return:
         """
         user =  controller.user.get(self.db, id)
-        response = {
-            "type": "sucess",
-            "message": "data found",
-            "data": mapper_response(user)
-        } 
+        if user:
+            response = {
+                "type": "sucess",
+                "message": "data found",
+                "data": mapper_response(user)
+            }
+        else:
+            response = {
+                "type": "error",
+                "message": "data not found",
+                "data": []
+            }
         
         return response
     

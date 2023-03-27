@@ -104,7 +104,6 @@ class CategoryRouter:
             if category:
                 list_lisk_asociate = controller.list.get_by_category(self.db, category.id)
                 for list_link in list_lisk_asociate:
-                    print("delete")
                     category_update = {
                         "idCategory": None
                     }

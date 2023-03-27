@@ -7,15 +7,14 @@ from sqlalchemy import event
 from sqlalchemy import DDL
 
 """
-ORM class to interact with the page table in the database
+ORM class to interact with the category table in the database
 """
 
-class Page(OrmBaseModel):
+
+class Category(OrmBaseModel):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    link = Column(String(1000), nullable=False, unique=True)   
-    title = Column(String(100), nullable=True)
-    description = Column(String(1000), nullable=True)
-    linkImage = Column(String(1000), nullable=True)
+    title = Column(String(100), nullable=False, unique=True)
+    description = Column(String(255), nullable=False)
     creationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
     ModificationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
 
@@ -23,5 +22,5 @@ class Page(OrmBaseModel):
 restart_seq = DDL("ALTER SEQUENCE %(table)s_id_seq RESTART WITH 100;")
 
 event.listen(
-    Page.__table__, "after_create", restart_seq.execute_if(dialect="mysql")
+    Category.__table__, "after_create", restart_seq.execute_if(dialect="mysql")
 )
