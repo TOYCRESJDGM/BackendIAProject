@@ -121,15 +121,6 @@ class ListLinkRouter:
         """
         try:
             creation_list =creation_list_mapper(list)
-            print(creation_list)
-
-            base_model =  load_model()
-            if not base_model:
-                return {
-                "type": "error",
-                "message": "Not found base model",
-                "data": []
-            }
 
             list_created = controller.list.create(self.db, entity=creation_list)
             if list.links:
@@ -138,6 +129,7 @@ class ListLinkRouter:
                     #creation pages and relation
                     print("Procesing link ...")
                     processing_link =  scraping_url(link)
+                    base_model =  load_model()
                     category_predict = base_model.predict([link])
                     page = {
                         "link": link,
