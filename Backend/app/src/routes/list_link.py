@@ -8,7 +8,7 @@ from src.adapters.mysql_adapter import get_db
 import src.controller as controller
 import src.schemas as schemas
 
-from src.utils import scraping_url
+from src.utils import scraping_url, load_model
 
 
 router = InferringRouter()
@@ -30,6 +30,7 @@ def mapper_pages(page):
         "title": page.title,
         "description": page.description,
         "link": page.link,
+        "category": page.category,
         "linkImage": page.linkImage,
         "creationDate": page.creationDate
     }
@@ -122,6 +123,14 @@ class ListLinkRouter:
             creation_list =creation_list_mapper(list)
             print(creation_list)
 
+            base_model =  load_model()
+            if not base_model:
+                return {
+                "type": "error",
+                "message": "Not found base model",
+                "data": []
+            }
+
             list_created = controller.list.create(self.db, entity=creation_list)
             if list.links:
                 for link in list.links:
@@ -129,10 +138,12 @@ class ListLinkRouter:
                     #creation pages and relation
                     print("Procesing link ...")
                     processing_link =  scraping_url(link)
+                    category_predict = base_model.predict([link])
                     page = {
                         "link": link,
                         "title": processing_link['title'],
-                        "description": processing_link['description']
+                        "description": processing_link['description'],
+                        "category": category_predict[0]
                     }
                     print("creando la pagina")
                     page_created = controller.page.create(self.db, entity=page)

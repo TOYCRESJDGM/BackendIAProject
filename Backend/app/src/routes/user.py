@@ -157,7 +157,7 @@ class UserRouter:
                 }
             else:
                 response = {
-                    "type": "errpr",
+                    "type": "error",
                     "message": "user not found",
                     "data": []
                 }

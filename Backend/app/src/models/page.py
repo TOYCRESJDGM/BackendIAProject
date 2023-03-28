@@ -16,7 +16,7 @@ class Page(OrmBaseModel):
     title = Column(String(100), nullable=True)
     description = Column(String(255), nullable=True)
     linkImage = Column(String(255), nullable=True)
-    idCategory = Column(Integer, ForeignKey('category.id'), nullable=True)
+    category = Column(String(255), nullable=True)
     creationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
     ModificationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
 
