@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 
 from src.adapters.orm_base import OrmBaseModel
 from sqlalchemy import event
@@ -16,6 +16,7 @@ class Page(OrmBaseModel):
     title = Column(String(100), nullable=True)
     description = Column(String(255), nullable=True)
     linkImage = Column(String(255), nullable=True)
+    category = Column(String(255), nullable=True)
     creationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
     ModificationDate = Column(DateTime(timezone=True), default=datetime.utcnow)
 
