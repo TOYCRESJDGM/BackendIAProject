@@ -1,7 +1,7 @@
 {
     "AWSEBDockerrunVersion": "1",
     "Image":{
-        "Name": "toycres/develop_project",
+        "Name": "juansmontoyaf/backend_ia_web_classifier",
         "Update": "true"
     },
     "Ports":[
