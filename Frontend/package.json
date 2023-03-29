@@ -1,0 +1,49 @@
+{
+  "name": "front_ia",
+  "version": "2.0.0",
+  "description": "Desarrollo de proyectos para IA (frontend) LinkScribe",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@material/grid-list": "^4.0.0",
+    "@mui/material": "^5.11.13",
+    "@mui/styled-engine-sc": "^5.11.11",
+    "classnames": "^2.3.2",
+    "file-saver": "^2.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-scripts": "5.0.1",
+    "serve": "^14.2.0",
+    "styled-components": "^5.3.9",
+    "sweetalert2": "^11.7.3"
+  },
+  "scripts": {
+    "start": "set PORT=3006 && react-scripts start",
+    "build": "react-scripts build",
+    "deploy-qa": "npm run build && serve -s build -l 3007",
+    "deploy": "serve -s build -l 3006"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GitTeamRocket/inventario"
+  },
+  "author": "TEAM ROCKET",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GitTeamRocket/inventario/issues"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

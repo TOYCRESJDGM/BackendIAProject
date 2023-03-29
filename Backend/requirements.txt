@@ -10,3 +10,4 @@ fastapi_utils
 PyJWT
 cryptography
 bs4
+scikit-learn
