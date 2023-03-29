@@ -1,4 +1,7 @@
+
 # IA PROJECT 🚀
+
+![alt text](https://github.com/TOYCRESJDGM/BackendIAProject/blob/develop/Frontend/public/LinkScribe-Logo.png)
 
 ## INTRODUCTION
 LinkScribe is a web application, where users can copy and paste a web link. The application will process it and extract the information obtained.
